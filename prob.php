@@ -1,12 +1,17 @@
 <?php
 // $uuu=randomFloatHigherThan(1,4);
 // var_dump($uuu);exit;
-
-// 
+//
 // $ary = [
 //     ['name' => 'bbbb', 'prob' => 1],
 //     ['name' => 'cccc', 'prob' => 2],
 //     ['name' => 'dddd', 'prob' => 0.5],
+//     ['name' => 'eeee', 'prob' => 1],
+// ];
+// $ary = [
+//     'dddd' => ['name' => 'bbbb', 'prob' => 0],
+//     ['name' => 'cccc', 'prob' => 0],
+//     ['name' => 'dddd', 'prob' => 0],
 //     ['name' => 'eeee', 'prob' => 1],
 // ];
 // var_dump($ary);
@@ -28,16 +33,33 @@ function drawRelativeProb($drawnAssoAry, $probKey) {
     $probSum = 0;
     foreach ($drawnAssoAry as $drawnAsso) {
         $probSum += $drawnAsso[$probKey];
-        // $probSum += $drawnAsso->$probKey;
     }
+
     // ----------------------------------
-    // 抽選
+    // 例外処理、相対確率が全て0のとき、先にここで例外的に抽選してしまう
+    // ----------------------------------
+    if ($probSum == 0) {
+        //// インデックスをランダムで決定する ////
+        $randNum = randomFloatHigherThan(0, count($drawnAssoAry));
+        $randIndex = ceil($randNum) - 1;
+// var_dump($randIndex);
+        //// 抽選を行う ////
+        $i=0;
+        foreach ($drawnAssoAry as $drawnAsso) {
+            if ($i == $randIndex) {
+                return $drawnAsso;
+            }
+            $i++;
+        }
+    }
+
+    // ----------------------------------
+    // 抽選本番
     // ----------------------------------
     $randNum = randomFloatHigherThan(0, $probSum);   //0～$sumまでのランダムな値（0は除く）
     $nowProb = 0;
     foreach ($drawnAssoAry as $key => $drawnAsso) {
         $nowProb += $drawnAsso[$probKey];
-        // $nowProb += $drawnAsso->{$probKey};
         if ($nowProb >= $randNum){
             return $drawnAsso;
         }
