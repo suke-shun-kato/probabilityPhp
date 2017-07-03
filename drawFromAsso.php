@@ -21,12 +21,15 @@ function drawRelativeProb($drawnAssoAry, $probKey, $returnKey = false) {
         //// インデックスをランダムで決定する ////
         $randNum = randomFloatHigherThan(0, count($drawnAssoAry));
         $randIndex = ceil($randNum) - 1;
-// var_dump($randIndex);
         //// 抽選を行う ////
         $i=0;
-        foreach ($drawnAssoAry as $drawnAsso) {
+        foreach ($drawnAssoAry as $key => $drawnAsso) {
             if ($i == $randIndex) {
-                return $drawnAsso;
+                if ($returnKey === true) {
+                    return $key;
+                } else {
+                    return $drawnAsso;
+                }
             }
             $i++;
         }
