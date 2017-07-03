@@ -1,32 +1,11 @@
 <?php
-// $uuu=randomFloatHigherThan(1,4);
-// var_dump($uuu);exit;
-//
-// $ary = [
-//     ['name' => 'bbbb', 'prob' => 1],
-//     ['name' => 'cccc', 'prob' => 2],
-//     ['name' => 'dddd', 'prob' => 0.5],
-//     ['name' => 'eeee', 'prob' => 1],
-// ];
-// $ary = [
-//     'dddd' => ['name' => 'bbbb', 'prob' => 0],
-//     ['name' => 'cccc', 'prob' => 0],
-//     ['name' => 'dddd', 'prob' => 0],
-//     ['name' => 'eeee', 'prob' => 1],
-// ];
-// var_dump($ary);
-//
-// $ssss = drawRelativeProb($ary, 'prob');
-// var_dump($ssss);
-
-
 /**
 * 確率のkeyが入った連想配列（複数）から抽選するプログラム
 * @param array[] $drawnAssoAry 抽選対象、連想配列の配列
 * @param string $probKey 確率が入った連想配列のキー名
 * @return array 連想配列
 */
-function drawRelativeProb($drawnAssoAry, $probKey) {
+function drawRelativeProb($drawnAssoAry, $probKey, $returnKey = false) {
     // ----------------------------------
     // 相対確率の合計値を求める
     // ----------------------------------
@@ -61,7 +40,11 @@ function drawRelativeProb($drawnAssoAry, $probKey) {
     foreach ($drawnAssoAry as $key => $drawnAsso) {
         $nowProb += $drawnAsso[$probKey];
         if ($nowProb >= $randNum){
-            return $drawnAsso;
+            if ($returnKey === true) {
+                return $key;
+            } else {
+                return $drawnAsso;
+            }
         }
     }
     throw new Exception('drawRelativeProb() end Error');
